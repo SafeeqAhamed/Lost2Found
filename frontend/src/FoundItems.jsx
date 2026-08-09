@@ -26,7 +26,7 @@ const getFoundItems=async()=>{
 
     try {
 
-        const res=await fetch("http://localhost:8081/api/found",{
+        const res=await fetch("https://lost2found-3l2n.onrender.com/api/found",{
             headers:{
                 Authorization:`Bearer ${token}`
             }
@@ -66,7 +66,7 @@ const addFoundItem=async(e)=>{
 
     try {
 
-        const res=await fetch("http://localhost:8081/api/found",{
+        const res=await fetch("https://lost2found-3l2n.onrender.com/api/found",{
             method:"POST",
             headers:{
                 "Content-Type":"application/json",
@@ -111,7 +111,7 @@ const deleteItem=async(id)=>{
 
     try {
 
-        const res=await fetch(`http://localhost:8081/api/found/${id}`,{
+        const res=await fetch(`https://lost2found-3l2n.onrender.com/api/found/${id}`,{
             method:"DELETE",
             headers:{
                 Authorization:`Bearer ${token}`
