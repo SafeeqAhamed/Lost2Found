@@ -2,6 +2,7 @@ package com.example.lostfound.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -38,16 +39,9 @@ public class SecurityConfig {
 
                 .authorizeHttpRequests(auth -> auth
 
-                        .requestMatchers(
-                                org.springframework.http.HttpMethod.POST,
-                                "/api/auth/login",
-                                "/api/auth/register"
-                        ).permitAll()
+                        .requestMatchers("/api/auth/**").permitAll()
 
-                        .requestMatchers(
-                                org.springframework.http.HttpMethod.OPTIONS,
-                                "/**"
-                        ).permitAll()
+                        .requestMatchers(HttpMethod.OPTIONS,"/**").permitAll()
 
                         .anyRequest().authenticated()
                 )
@@ -78,6 +72,7 @@ public class SecurityConfig {
                         "POST",
                         "PUT",
                         "DELETE",
+                        "PATCH",
                         "OPTIONS"
                 )
         );
@@ -91,10 +86,7 @@ public class SecurityConfig {
         UrlBasedCorsConfigurationSource source=
                 new UrlBasedCorsConfigurationSource();
 
-        source.registerCorsConfiguration(
-                "/**",
-                configuration
-        );
+        source.registerCorsConfiguration("/**",configuration);
 
         return source;
     }
