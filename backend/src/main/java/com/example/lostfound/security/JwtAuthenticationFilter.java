@@ -24,54 +24,63 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private String secret;
 
     @Override
-protected void doFilterInternal(
-        HttpServletRequest request,
-        HttpServletResponse response,
-        FilterChain filterChain) throws ServletException,IOException {
+    protected void doFilterInternal(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            FilterChain filterChain) throws ServletException,IOException {
 
-    if(request.getMethod().equalsIgnoreCase("OPTIONS")) {
+        if(request.getMethod().equalsIgnoreCase("OPTIONS")) {
+            filterChain.doFilter(request,response);
+            return;
+        }
+
+        String path=request.getServletPath();
+
+        if(path.equals("/api/auth/login") ||
+                path.equals("/api/auth/register")) {
+
+            filterChain.doFilter(request,response);
+            return;
+        }
+
+        String authHeader=request.getHeader("Authorization");
+
+        if(authHeader==null || !authHeader.startsWith("Bearer ")) {
+            filterChain.doFilter(request,response);
+            return;
+        }
+
+        String token=authHeader.substring(7);
+
+        try {
+
+            SecretKey key=Keys.hmacShaKeyFor(
+                    secret.getBytes(StandardCharsets.UTF_8)
+            );
+
+            String email=Jwts.parser()
+                    .verifyWith(key)
+                    .build()
+                    .parseSignedClaims(token)
+                    .getPayload()
+                    .getSubject();
+
+            UsernamePasswordAuthenticationToken authentication=
+                    new UsernamePasswordAuthenticationToken(
+                            email,
+                            null,
+                            Collections.emptyList()
+                    );
+
+            SecurityContextHolder.getContext()
+                    .setAuthentication(authentication);
+
+        } catch(Exception e) {
+
+            System.out.println("Invalid JWT token: "+e.getMessage());
+
+        }
+
         filterChain.doFilter(request,response);
-        return;
     }
-
-    String authHeader=request.getHeader("Authorization");
-
-    if(authHeader==null || !authHeader.startsWith("Bearer ")) {
-        filterChain.doFilter(request,response);
-        return;
-    }
-
-    String token=authHeader.substring(7);
-
-    try {
-
-        SecretKey key=Keys.hmacShaKeyFor(
-                secret.getBytes(StandardCharsets.UTF_8)
-        );
-
-        String email=Jwts.parser()
-                .verifyWith(key)
-                .build()
-                .parseSignedClaims(token)
-                .getPayload()
-                .getSubject();
-
-        UsernamePasswordAuthenticationToken authentication=
-                new UsernamePasswordAuthenticationToken(
-                        email,
-                        null,
-                        Collections.emptyList()
-                );
-
-        SecurityContextHolder.getContext()
-                .setAuthentication(authentication);
-
-    } catch(Exception e) {
-
-        System.out.println("Invalid JWT token");
-
-    }
-
-    filterChain.doFilter(request,response);
-}
 }
