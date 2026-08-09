@@ -37,11 +37,20 @@ public class SecurityConfig {
                 )
 
                 .authorizeHttpRequests(auth -> auth
-                                         .requestMatchers(org.springframework.http.HttpMethod.POST,"/api/auth/login").permitAll()
-                                         .requestMatchers(org.springframework.http.HttpMethod.POST,"/api/auth/register").permitAll()
-                                         .requestMatchers(org.springframework.http.HttpMethod.OPTIONS,"/**").permitAll()
-                                         .anyRequest().authenticated()
-                                      )
+
+                        .requestMatchers(
+                                org.springframework.http.HttpMethod.POST,
+                                "/api/auth/login",
+                                "/api/auth/register"
+                        ).permitAll()
+
+                        .requestMatchers(
+                                org.springframework.http.HttpMethod.OPTIONS,
+                                "/**"
+                        ).permitAll()
+
+                        .anyRequest().authenticated()
+                )
 
                 .addFilterBefore(
                         jwtAuthenticationFilter,
@@ -64,7 +73,13 @@ public class SecurityConfig {
         );
 
         configuration.setAllowedMethods(
-                List.of("GET","POST","PUT","DELETE","OPTIONS")
+                List.of(
+                        "GET",
+                        "POST",
+                        "PUT",
+                        "DELETE",
+                        "OPTIONS"
+                )
         );
 
         configuration.setAllowedHeaders(
@@ -76,7 +91,10 @@ public class SecurityConfig {
         UrlBasedCorsConfigurationSource source=
                 new UrlBasedCorsConfigurationSource();
 
-        source.registerCorsConfiguration("/**",configuration);
+        source.registerCorsConfiguration(
+                "/**",
+                configuration
+        );
 
         return source;
     }
