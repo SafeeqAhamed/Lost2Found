@@ -1,0 +1,311 @@
+/* Home.css */
+
+/* Basic Reset for full height */
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    overflow-x: hidden;
+}
+
+.home-page {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 30px 20px;
+    /* GRAND BACKGROUND: Multilayer gradient with aura effect */
+    background: 
+        radial-gradient(circle at 10% 20%, rgba(37, 99, 235, 0.15) 0%, transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(236, 72, 153, 0.15) 0%, transparent 40%),
+        linear-gradient(135deg, #e0f2fe 0%, #eef2ff 50%, #fdf2f8 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Background Graphic Blobs */
+.home-page::before,
+.home-page::after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    z-index: 0;
+    opacity: 0.6;
+}
+
+.home-page::before {
+    width: 400px;
+    height: 400px;
+    background: #3b82f6; /* Blue blob */
+    top: -100px;
+    left: -100px;
+    animation: blobFloat 15s infinite alternate;
+}
+
+.home-page::after {
+    width: 350px;
+    height: 350px;
+    background: #ec4899; /* Pink blob */
+    bottom: -80px;
+    right: -80px;
+    animation: blobFloat 12s infinite alternate-reverse;
+}
+
+/* Glassmorphism Card */
+.home-card {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    max-width: 650px;
+    padding: 60px 50px;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border-radius: 30px;
+    text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    box-shadow: 0 25px 60px -10px rgba(15, 23, 42, 0.15);
+    animation: homeCardEntrance 1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* Decorative top gradient bar */
+.card-deco-bar {
+    position: absolute;
+    top: 0;
+    left: 30px;
+    right: 30px;
+    height: 6px;
+    background: linear-gradient(90deg, #2563eb, #ec4899);
+    border-radius: 0 0 10px 10px;
+}
+
+/* Icon Section */
+.home-icon-container {
+    position: relative;
+    width: 90px;
+    height: 90px;
+    margin: 0 auto 20px;
+}
+
+.home-icon {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+    border-radius: 50%;
+    font-size: 40px;
+    box-shadow: 0 10px 20px rgba(37, 99, 235, 0.1);
+    border: 2px solid white;
+    position: relative;
+    z-index: 2;
+    animation: iconPulse 2s infinite;
+}
+
+.home-icon-container::after {
+    content: '';
+    position: absolute;
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%;
+    background: #2563eb;
+    border-radius: 50%;
+    filter: blur(15px);
+    opacity: 0.3;
+    z-index: 1;
+    animation: glowPulse 2s infinite;
+}
+
+/* --- FULLY FIXED TITLE CSS --- */
+.home-card h1 {
+    margin: 10px 0 10px 0;
+    font-size: 46px;
+    font-weight: 800;
+    line-height: 1.25;               /* Fixes clipping on top and bottom */
+    padding: 4px 0;                  /* Gives breathing room for text clip box */
+    color: #0f172a;                  /* High contrast fallback */
+    
+    background: linear-gradient(135deg, #0f172a 0%, #2563eb 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    
+    letter-spacing: -0.5px;
+}
+
+/* Fallback if background-clip is unsupported */
+@supports not (-webkit-background-clip: text) {
+    .home-card h1 {
+        color: #1e3a8a;
+    }
+}
+
+.home-tagline {
+    margin: 0 0 15px;
+    font-size: 22px;
+    font-weight: 700;
+    color: #db2777;
+    letter-spacing: -0.5px;
+}
+
+.home-description {
+    max-width: 480px;
+    margin: 0 auto 20px;
+    line-height: 1.7;
+    font-size: 16px;
+    color: #4b5563;
+    font-weight: 400;
+}
+
+/* --- FIXED QUOTE LAYOUT --- */
+.home-quote-container {
+    margin: 20px 0 30px 0;
+}
+
+.home-quote {
+    font-style: italic;
+    color: #64748b;
+    font-size: 15px;
+    margin: 0;
+    padding: 0 10px;
+    display: inline-block;
+}
+
+.home-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 18px;
+    margin-top: 10px;
+}
+
+.home-buttons button {
+    min-width: 200px;
+    padding: 16px 30px;
+    border: none;
+    border-radius: 14px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.home-login-button {
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    color: white;
+    box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.4);
+}
+
+.home-login-button:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 15px 30px -5px rgba(37, 99, 235, 0.6);
+}
+
+.home-signup-button {
+    background: white;
+    color: #1e293b;
+    border: 2px solid #e2e8f0 !important;
+}
+
+.home-signup-button:hover {
+    background: #f8fafc;
+    border-color: #cbd5e1 !important;
+    transform: translateY(-4px);
+    box-shadow: 0 10px 20px -5px rgba(15, 23, 42, 0.1);
+}
+
+.home-footer {
+    margin-top: 35px;
+    font-size: 14px;
+    color: #9ca3af;
+    font-weight: 500;
+}
+
+/* Animations */
+@keyframes homeCardEntrance {
+    from {
+        opacity: 0;
+        transform: translateY(30px) scale(0.97);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes iconPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+@keyframes glowPulse {
+    0%, 100% { opacity: 0.3; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.1); }
+}
+
+@keyframes blobFloat {
+    0% { transform: translate(0, 0) rotate(0deg); }
+    100% { transform: translate(40px, 40px) rotate(20deg); }
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 650px) {
+    .home-page {
+        padding: 20px 15px;
+    }
+
+    .home-card {
+        padding: 40px 20px;
+        border-radius: 24px;
+    }
+
+    .card-deco-bar {
+        left: 20px;
+        right: 20px;
+    }
+
+    .home-icon-container {
+        width: 75px;
+        height: 75px;
+        margin-bottom: 15px;
+    }
+
+    .home-icon {
+        font-size: 32px;
+    }
+
+    .home-card h1 {
+        font-size: 32px;
+        line-height: 1.3;
+        margin: 5px 0 10px 0;
+    }
+
+    .home-tagline {
+        font-size: 18px;
+    }
+
+    .home-description {
+        font-size: 15px;
+    }
+
+    .home-quote {
+        font-size: 14px;
+    }
+
+    .home-buttons {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .home-buttons button {
+        width: 100%;
+        min-width: unset;
+        padding: 14px 20px;
+    }
+}
