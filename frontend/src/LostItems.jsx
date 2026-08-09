@@ -26,7 +26,7 @@ function LostItems() {
 
         try {
 
-            const res=await fetch("http://localhost:8081/api/lost",{
+            const res=await fetch("https://lost2found-3l2n.onrender.com/api/lost",{
                 headers:{
                     Authorization:`Bearer ${token}`
                 }
@@ -66,7 +66,7 @@ function LostItems() {
 
         try {
 
-            const res=await fetch("http://localhost:8081/api/lost",{
+            const res=await fetch("https://lost2found-3l2n.onrender.com/api/lost",{
                 method:"POST",
                 headers:{
                     "Content-Type":"application/json",
@@ -111,7 +111,7 @@ function LostItems() {
 
         try {
 
-            const res=await fetch(`http://localhost:8081/api/lost/${id}`,{
+            const res=await fetch(`https://lost2found-3l2n.onrender.com/api/lost/${id}`,{
                 method:"DELETE",
                 headers:{
                     Authorization:`Bearer ${token}`

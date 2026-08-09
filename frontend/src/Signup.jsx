@@ -24,7 +24,7 @@ function Signup() {
 
         try {
 
-            const res=await fetch("http://localhost:8081/api/auth/register",{
+            const res=await fetch("https://lost2found-3l2n.onrender.com/api/auth/register",{
                 method:"POST",
                 headers:{
                     "Content-Type":"application/json"
