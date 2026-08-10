@@ -41,24 +41,21 @@ public class SecurityConfig {
                 )
 
                 .authorizeHttpRequests(auth -> auth
-
                         .requestMatchers("/api/auth/**").permitAll()
-
                         .requestMatchers(HttpMethod.OPTIONS,"/**").permitAll()
-
                         .anyRequest().authenticated()
+                )
+
+                .exceptionHandling(exception -> exception
+                        .authenticationEntryPoint((request,response,authException) -> {
+                            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                        })
                 )
 
                 .addFilterBefore(
                         jwtAuthenticationFilter,
                         UsernamePasswordAuthenticationFilter.class
                 );
-
-                .exceptionHandling(exception -> exception
-                    .authenticationEntryPoint((request,response,authException) -> {
-                         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        })
-)
 
         return http.build();
     }
@@ -68,11 +65,8 @@ public class SecurityConfig {
 
         CorsConfiguration configuration=new CorsConfiguration();
 
-        configuration.setAllowedOrigins(
-                List.of(
-                        "http://localhost:5173",
-                        "http://localhost:5174"
-                )
+        configuration.setAllowedOriginPatterns(
+                List.of("*")
         );
 
         configuration.setAllowedMethods(
