@@ -28,7 +28,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         String path=request.getServletPath();
 
-        return path.equals("/api/auth/login")
+        return request.getMethod().equalsIgnoreCase("OPTIONS")
+                || path.equals("/api/auth/login")
                 || path.equals("/api/auth/register");
     }
 
@@ -72,7 +73,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         } catch(Exception e) {
 
-            System.out.println("Invalid JWT token: "+e.getMessage());
+            System.out.println(
+                    "Invalid JWT token: "+e.getMessage()
+            );
 
         }
 
