@@ -1,12 +1,10 @@
 package com.example.lostfound.security;
 
 import jakarta.servlet.http.HttpServletResponse;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,7 +17,6 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import java.util.List;
 
 @Configuration
-@EnableWebSecurity
 public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
@@ -32,24 +29,46 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-
                 .csrf(csrf -> csrf.disable())
+
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
 
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
 
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers(HttpMethod.OPTIONS,"/**").permitAll()
+
+                        // LOGIN - PUBLIC
+                        .requestMatchers(
+                                HttpMethod.POST,
+                                "/api/auth/login"
+                        ).permitAll()
+
+                        // REGISTER - PUBLIC
+                        .requestMatchers(
+                                HttpMethod.POST,
+                                "/api/auth/register"
+                        ).permitAll()
+
+                        // OPTIONS - PUBLIC
+                        .requestMatchers(
+                                HttpMethod.OPTIONS,
+                                "/**"
+                        ).permitAll()
+
+                        // EVERYTHING ELSE - JWT REQUIRED
                         .anyRequest().authenticated()
                 )
 
                 .exceptionHandling(exception -> exception
-                        .authenticationEntryPoint((request,response,authException) -> {
-                            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                        })
+                        .authenticationEntryPoint(
+                                (request,response,authException) -> {
+                                    response.setStatus(
+                                            HttpServletResponse.SC_UNAUTHORIZED
+                                    );
+                                }
+                        )
                 )
 
                 .addFilterBefore(
@@ -65,11 +84,10 @@ public class SecurityConfig {
 
         CorsConfiguration configuration=new CorsConfiguration();
 
-        configuration.setAllowedOriginPatterns(
+        configuration.setAllowedOrigins(
                 List.of(
                         "http://localhost:5173",
-                        "http://localhost:5174",
-                        "https://*.netlify.app"
+                        "http://localhost:5174"
                 )
         );
 
@@ -93,7 +111,10 @@ public class SecurityConfig {
         UrlBasedCorsConfigurationSource source=
                 new UrlBasedCorsConfigurationSource();
 
-        source.registerCorsConfiguration("/**",configuration);
+        source.registerCorsConfiguration(
+                "/**",
+                configuration
+        );
 
         return source;
     }
