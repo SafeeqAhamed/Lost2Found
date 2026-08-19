@@ -18,8 +18,8 @@ public class JwtService {
     public String generateToken(String email) {
 
         SecretKey key=Keys.hmacShaKeyFor(
-                secret.getBytes(StandardCharsets.UTF_8)
-        );
+                secret.getBytes(StandardCharsets.UTF_8) //cryptographic keys work with bytes.
+        );                                             //Takes those bytes and creates a proper HMAC secret key
 
         return Jwts.builder()
                 .subject(email)

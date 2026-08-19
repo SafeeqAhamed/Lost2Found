@@ -26,17 +26,17 @@ public class LostItemController {
 
     @PostMapping
     public ResponseEntity<LostItem> addLostItem(
-            @RequestBody LostItem item,
+            @RequestBody LostItem item,      //item la details only no username and email
             Authentication authentication) {
 
-        String email=authentication.getName();
+        String email=authentication.getName();  //take email from auth to check it is in db
 
         User user=userRepository.findByEmail(email).orElse(null);
 
         if(user==null) {
-            return ResponseEntity.status(401).build();
+            return ResponseEntity.status(401).build();   // build() === no response
         }
-
+        //Existing ah user iruntha -atttach name and email with Lost details and push
         item.setUsername(user.getUsername());
         item.setEmail(user.getEmail());
 
@@ -44,7 +44,7 @@ public class LostItemController {
 
         return ResponseEntity.ok(savedItem);
     }
-
+//_______________________________________________________________________
     @GetMapping
     public ResponseEntity<List<LostItem>> getLostItems() {
 
@@ -52,7 +52,7 @@ public class LostItemController {
 
         return ResponseEntity.ok(items);
     }
-
+//_____________________________________________________________________________
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteLostItem(
             @PathVariable String id,

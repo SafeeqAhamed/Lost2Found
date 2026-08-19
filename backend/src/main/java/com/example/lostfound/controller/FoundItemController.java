@@ -23,7 +23,7 @@ public class FoundItemController {
         this.foundItemRepository=foundItemRepository;
         this.userRepository=userRepository;
     }
-
+//___________________________________________________________________________
     @PostMapping
     public ResponseEntity<FoundItem> addFoundItem(
             @RequestBody FoundItem item,
@@ -44,7 +44,7 @@ public class FoundItemController {
 
         return ResponseEntity.ok(savedItem);
     }
-
+//___________________________________________________________________________________
     @GetMapping
     public ResponseEntity<List<FoundItem>> getFoundItems() {
 
@@ -52,7 +52,7 @@ public class FoundItemController {
 
         return ResponseEntity.ok(items);
     }
-
+//__________________________________________________________________________________
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteFoundItem(
             @PathVariable String id,
@@ -68,7 +68,7 @@ public class FoundItemController {
 
         if(!item.getEmail().equals(loggedInEmail)) {
             return ResponseEntity.status(403)
-                    .body("You can only delete your own found items");
+                                .body("You can only delete your own found items");
         }
 
         foundItemRepository.deleteById(id);

@@ -27,8 +27,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected boolean shouldNotFilter(HttpServletRequest request) {
 
         String path=request.getServletPath();
-
-        return request.getMethod().equalsIgnoreCase("OPTIONS")
+                                                   //OPTIONS /api/auth/login (browser asking permission before making the real request)
+        return request.getMethod().equalsIgnoreCase("OPTIONS")   //skips the filter for-coz u dont have jwt yet
                 || path.equals("/api/auth/login")
                 || path.equals("/api/auth/register");
     }
@@ -42,8 +42,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String authHeader=request.getHeader("Authorization");
 
         if(authHeader==null || !authHeader.startsWith("Bearer ")) {
-            filterChain.doFilter(request,response);
-            return;
+            filterChain.doFilter(request,response); //done with this filte
+            return;                               // Pass the request to the next filter/controller."
         }
 
         String token=authHeader.substring(7);
@@ -55,9 +55,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             );
 
             String email=Jwts.parser()
-                    .verifyWith(key)
+                    .verifyWith(key)    //Is the token valid? & Was it created using our secret key?
                     .build()
-                    .parseSignedClaims(token)
+                    .parseSignedClaims(token)   //Has it been modified/invalid?
                     .getPayload()
                     .getSubject();
 
@@ -65,7 +65,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     new UsernamePasswordAuthenticationToken(
                             email,
                             null,
-                            Collections.emptyList()
+                            Collections.emptyList()  //What roles/permissions does user have?
                     );
 
             SecurityContextHolder.getContext()
