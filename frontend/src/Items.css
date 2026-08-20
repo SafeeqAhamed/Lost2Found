@@ -1,0 +1,510 @@
+/* ================================
+   ITEMS PAGE
+================================ */
+
+.items-page {
+    min-height: 100vh;
+    padding: 40px 20px 60px;
+    background:
+        radial-gradient(circle at top left, rgba(37,99,235,0.08), transparent 35%),
+        radial-gradient(circle at bottom right, rgba(124,58,237,0.08), transparent 35%),
+        #f8fafc;
+    box-sizing: border-box;
+}
+
+.items-container {
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+
+/* ================================
+   HEADER
+================================ */
+
+.items-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    gap: 20px;
+}
+
+.items-header h1 {
+    margin: 0;
+    font-size: 36px;
+    font-weight: 700;
+    color: #111827;
+    letter-spacing: -1px;
+}
+
+.back-button {
+    border: none;
+    padding: 11px 18px;
+    border-radius: 10px;
+    background: #111827;
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.back-button:hover {
+    background: #1f2937;
+    transform: translateY(-2px);
+}
+
+
+/* ================================
+   REPORT CARD
+================================ */
+
+.report-card {
+    background: white;
+    padding: 30px;
+    border-radius: 18px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 10px 30px rgba(15,23,42,0.08);
+    margin-bottom: 45px;
+}
+
+.report-card h2 {
+    margin: 0 0 25px;
+    font-size: 23px;
+    color: #111827;
+}
+
+
+/* ================================
+   FORM
+================================ */
+
+.form-group {
+    margin-bottom: 18px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 7px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #374151;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 13px 14px;
+    box-sizing: border-box;
+    border: 1px solid #d1d5db;
+    border-radius: 10px;
+    background: #ffffff;
+    color: #111827;
+    font-size: 15px;
+    outline: none;
+    transition: all 0.25s ease;
+}
+
+.form-group input:hover {
+    border-color: #9ca3af;
+}
+
+.form-group input:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 4px rgba(37,99,235,0.10);
+}
+
+
+/* ================================
+   SUBMIT BUTTON
+================================ */
+
+.form-submit {
+    width: 100%;
+    padding: 14px;
+    margin-top: 5px;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(135deg,#2563eb,#4f46e5);
+    color: white;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.form-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(37,99,235,0.25);
+}
+
+.form-submit:active {
+    transform: translateY(0);
+}
+
+
+/* ================================
+   ITEMS SECTION
+================================ */
+
+.items-section h2 {
+    margin: 0 0 22px;
+    font-size: 25px;
+    color: #111827;
+}
+
+
+/* ================================
+   EMPTY MESSAGE
+================================ */
+
+.empty-message {
+    padding: 35px;
+    text-align: center;
+    background: white;
+    border: 1px dashed #cbd5e1;
+    border-radius: 15px;
+    color: #64748b;
+    font-size: 15px;
+}
+
+
+/* ================================
+   ITEMS GRID
+================================ */
+
+.items-grid {
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 22px;
+}
+
+
+/* ================================
+   ITEM CARD
+================================ */
+
+.item-card {
+    position: relative;
+    background: white;
+    padding: 23px;
+    border-radius: 16px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 8px 25px rgba(15,23,42,0.06);
+    transition: all 0.25s ease;
+    overflow: hidden;
+}
+
+.item-card::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg,#2563eb,#7c3aed);
+}
+
+.item-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(15,23,42,0.11);
+}
+
+.item-card h3 {
+    margin: 5px 0 18px;
+    font-size: 20px;
+    color: #111827;
+}
+
+.item-card p {
+    margin: 9px 0;
+    color: #64748b;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.item-card strong {
+    color: #374151;
+}
+
+
+/* ================================
+   DELETE BUTTON
+================================ */
+
+.delete-button {
+    width: 100%;
+    margin-top: 15px;
+    padding: 10px;
+    border: 1px solid #fecaca;
+    border-radius: 9px;
+    background: #fef2f2;
+    color: #dc2626;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.delete-button:hover {
+    background: #fee2e2;
+    border-color: #fca5a5;
+}
+
+
+/* ================================
+   FOUND ITEMS PAGE
+================================ */
+
+.found-page {
+    min-height: 100vh;
+    padding: 40px 20px 60px;
+    background:
+        radial-gradient(circle at top right, rgba(16,185,129,0.08), transparent 35%),
+        radial-gradient(circle at bottom left, rgba(37,99,235,0.08), transparent 35%),
+        #f8fafc;
+    box-sizing: border-box;
+}
+
+.found-container {
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.found-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    gap: 20px;
+}
+
+.found-header h1 {
+    margin: 0;
+    font-size: 36px;
+    font-weight: 700;
+    color: #111827;
+    letter-spacing: -1px;
+}
+
+.found-back-button {
+    border: none;
+    padding: 11px 18px;
+    border-radius: 10px;
+    background: #111827;
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.found-back-button:hover {
+    background: #1f2937;
+    transform: translateY(-2px);
+}
+
+
+/* ================================
+   FOUND REPORT CARD
+================================ */
+
+.found-report-card {
+    background: white;
+    padding: 30px;
+    border-radius: 18px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 10px 30px rgba(15,23,42,0.08);
+    margin-bottom: 45px;
+}
+
+.found-report-card h2 {
+    margin: 0 0 25px;
+    font-size: 23px;
+    color: #111827;
+}
+
+.found-form-group {
+    margin-bottom: 18px;
+}
+
+.found-form-group label {
+    display: block;
+    margin-bottom: 7px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #374151;
+}
+
+.found-form-group input {
+    width: 100%;
+    padding: 13px 14px;
+    box-sizing: border-box;
+    border: 1px solid #d1d5db;
+    border-radius: 10px;
+    background: white;
+    color: #111827;
+    font-size: 15px;
+    outline: none;
+    transition: all 0.25s ease;
+}
+
+.found-form-group input:focus {
+    border-color: #059669;
+    box-shadow: 0 0 0 4px rgba(5,150,105,0.10);
+}
+
+.found-submit-button {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(135deg,#059669,#10b981);
+    color: white;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.found-submit-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(5,150,105,0.25);
+}
+
+
+/* ================================
+   FOUND SECTION
+================================ */
+
+.found-section h2 {
+    margin: 0 0 22px;
+    font-size: 25px;
+    color: #111827;
+}
+
+.found-empty {
+    padding: 35px;
+    text-align: center;
+    background: white;
+    border: 1px dashed #cbd5e1;
+    border-radius: 15px;
+    color: #64748b;
+}
+
+.found-grid {
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 22px;
+}
+
+.found-card {
+    position: relative;
+    background: white;
+    padding: 23px;
+    border-radius: 16px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 8px 25px rgba(15,23,42,0.06);
+    transition: all 0.25s ease;
+    overflow: hidden;
+}
+
+.found-card::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg,#059669,#10b981);
+}
+
+.found-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(15,23,42,0.11);
+}
+
+.found-card h3 {
+    margin: 5px 0 18px;
+    font-size: 20px;
+    color: #111827;
+}
+
+.found-card p {
+    margin: 9px 0;
+    color: #64748b;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.found-card strong {
+    color: #374151;
+}
+
+.found-delete-button {
+    width: 100%;
+    margin-top: 15px;
+    padding: 10px;
+    border: 1px solid #fecaca;
+    border-radius: 9px;
+    background: #fef2f2;
+    color: #dc2626;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.found-delete-button:hover {
+    background: #fee2e2;
+}
+
+
+/* ================================
+   MOBILE
+================================ */
+
+@media (max-width:900px) {
+
+    .items-grid,
+    .found-grid {
+        grid-template-columns: repeat(2,1fr);
+    }
+
+}
+
+@media (max-width:600px) {
+
+    .items-page,
+    .found-page {
+        padding: 25px 15px 40px;
+    }
+
+    .items-header,
+    .found-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .items-header h1,
+    .found-header h1 {
+        font-size: 30px;
+    }
+
+    .back-button,
+    .found-back-button {
+        width: 100%;
+    }
+
+    .report-card,
+    .found-report-card {
+        padding: 22px;
+    }
+
+    .items-grid,
+    .found-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
