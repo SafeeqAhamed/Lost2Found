@@ -45,11 +45,13 @@ const handleSubmit=async(e)=>{
             localStorage.setItem("username",data.username);
             localStorage.setItem("email",data.email);
 
+            onLogin();
+
             navigate("/dashboard");
 
         } else if(res.status===401) {
 
-            setError("Unauthorized request. Please login again.");
+            setError("Invalid email or password.");
 
         } else {
 
@@ -67,6 +69,7 @@ const handleSubmit=async(e)=>{
 };
 
 return (
+
     <div className="auth-page">
 
         <div className="auth-card">
@@ -133,6 +136,7 @@ return (
         </div>
 
     </div>
+
 );
 
 }
