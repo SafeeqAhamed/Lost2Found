@@ -48,7 +48,7 @@ public class SecurityConfig {
                                                         "/**"
                                                 ).permitAll()
 
-                                                .anyRequest().authenticated()
+                                                .anyRequest().authenticated()  //Protect Everything Else
                                 )
 
                 .exceptionHandling(exception -> exception
