@@ -12,49 +12,74 @@ function Signup() {
 
     const navigate=useNavigate();
 
+//___________________________________________________________________________________________
     const handleSubmit=async(e)=>{
         e.preventDefault();
 
         setError("");
 
-        if(!email.endsWith("@vitstudent.ac.in")){
-            setError("Only VIT student emails are allowed.");
-            return;
-        }
+        if(!email.endsWith("@vitstudent.ac.in"))
+                        {setError("Only VIT student emails are allowed.");
+                        return; }
+       
 
         try {
 
-            const res=await fetch("https://lost2found-3l2n.onrender.com/api/auth/register",{
-                method:"POST",
-                headers:{
-                    "Content-Type":"application/json"
-                },
-                body:JSON.stringify({
-                    username:username,
-                    email:email,
-                    password:password
-                })
-            });
+            const res=await fetch("https://lost2found-3l2n.onrender.com/api/auth/register",
+                                        {method:"POST",
+                                        headers:{"Content-Type":"application/json"},
+                                        body:JSON.stringify(
+                                                            {username:username,
+                                                            email:email,
+                                                            password:password }
+                                                        )
+                                        }
+                                 );
 
-            const data=await res.json();
+            //Reading the response body can take time
+            const text=await res.text();
 
-            if(!res.ok){
-                setError(typeof data==="string" ? data : "Registration failed");
-                return;
-            }
+            //res.ok       // Was the request successful?
+            //res.status   // 200, 400, etc.
 
-            alert("Registration successful! Please login.");
+            let data=null;    //let - reassigned   const -cannot reassigned
 
-            navigate("/login");
+            if(text)
+                {
+                    try {
+                        //If backend sends JSON, convert text to JavaScript object
+                        data=JSON.parse(text);
+                    } catch {
+                        //If backend sends plain text, store it directly
+                        data=text;
+                    }
+                }
 
-        } catch(err) {
+            //SUCCESSFUL✅
+            if(res.ok)
+                {
+                    alert("Registration successful! Please login.");
 
-            console.error(err);
-            setError("Server is not reachable.");
+                    navigate("/login");
+                }
 
-        }
+            //ERROR❌
+            else
+                {
+                    //If backend sent an error message, display it
+                    //Otherwise display the default "Registration failed" message
+                    setError(data || "Registration failed");
+                    return;
+                }
+
+        } catch(err)
+            {console.error(err);
+             setError("Server is not reachable.");}
+
+        
     };
 
+//___________________________________________________________________________________________
     return (
         <div className="auth-page">
 
