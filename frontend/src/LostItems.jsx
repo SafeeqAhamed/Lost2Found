@@ -1,18 +1,21 @@
 import React,{useEffect,useState} from "react";
 import {useNavigate} from "react-router-dom";
 
-function LostItems() {
+import "./Items.css";
 
-    const [items,setItems]=useState([]);
+
+function LostItems() {
+    // Stores all lost items received from the backend
+    const [items,setItems]=useState([]);      //[ {} ,{}]
     const [itemName,setItemName]=useState("");
-    const [category,setCategory]=useState("");
+
     const [location,setLocation]=useState("");
     const [date,setDate]=useState("");
 
     const navigate=useNavigate();
 
-    const token=localStorage.getItem("token");
-    const loggedInEmail=localStorage.getItem("email");
+    const token=localStorage.getItem("token");  //// Used to prove to the backend that the user is authenticated
+    const loggedInEmail=localStorage.getItem("email");  //// Used later to decide whether to show the Delete button
 
     const logout=()=>{
         localStorage.removeItem("token");
@@ -22,124 +25,133 @@ function LostItems() {
         navigate("/login");
     };
 
-    const getLostItems=async()=>{
+// GETLOSTITEMS -> ADD + DELETE
+
+//______________________________
+    const getLostItems=async()=>{             //Has to be called after adding||removing 
 
         try {
 
-            const res=await fetch("https://lost2found-3l2n.onrender.com/api/lost",{
-                headers:{
-                    Authorization:`Bearer ${token}`
-                }
-            });
+            const res=await fetch("https://lost2found-3l2n.onrender.com/api/lost",
+                                        {headers:{
+                                                Authorization:`Bearer ${token}`
+                                                }
+                                        //method default=get
+                                        //kondu varathuku BODY ethuvum kuduka vendam
+                                         }
+                                 );
+  
+            //AUTH PROBLEM❌
+            if(res.status===401)   // // If token is invalid/expired, backend returns 401 Unauthorized
+                            {logout(); 
+                            return;}
+            //SUCCESSFUL✅
+            else if(res.ok)             // If item was successfully added
+                 {const data=await res.json();
+                 // Store all received lost items in the items state  to update the UI
+                 setItems(data);}
 
-            if(res.status===401) {
-                logout();
-                return;
-            }
+            //OTHER PROBLEM
+            else 
+                {console.log("Failed to get lost items");}
 
-            if(res.ok) {
+        } catch(err) 
+                  {console.log("Error:",err);}
 
-                const data=await res.json();
-
-                setItems(data);
-
-            } else {
-
-                console.log("Failed to get lost items");
-
-            }
-
-        } catch(err) {
-
-            console.log("Error:",err);
-
-        }
+        
     };
+    
+//_____________________________________________________________________________________________________________
+    //When the LostItems page opens for the first time, useEffect calls getLostItems() to get all items from the database.
 
-    useEffect(()=>{
-        getLostItems();
-    },[]);
+    // useEffect runs automatically when this component first loads
+    useEffect(()=>{ getLostItems(); },[]);
+     // [] means: run only once when the component first loads
 
-    const addLostItem=async(e)=>{
+//________________________________
+
+    // When we submit a form, the browser automatically reloads the page by default
+    // We use the event object (e) to prevent that default behavior
+    const addLostItem=async(e)=>{   //sending data-event
 
         e.preventDefault();
 
         try {
 
-            const res=await fetch("https://lost2found-3l2n.onrender.com/api/lost",{
-                method:"POST",
-                headers:{
-                    "Content-Type":"application/json",
-                    Authorization:`Bearer ${token}`
-                },
-                body:JSON.stringify({
-                    itemName:itemName,
-                    category:category,
-                    location:location,
-                    date:date
-                })
-            });
-
-            if(res.status===401) {
-                logout();
-                return;
-            }
-
-            if(res.ok) {
-
-                setItemName("");
-                setCategory("");
+            const res=await fetch("https://lost2found-3l2n.onrender.com/api/lost",
+                                        {   method:"POST",
+                                            headers:
+                                                  {"Content-Type":"application/json",   //tells the backend:
+                                                                                        //"The data I am sending in the request body is JSON."
+                                                                                        //if not  sending any data as body -no needed
+                                                    Authorization:`Bearer ${token}`
+                                                  },
+                                            body:JSON.stringify(
+                                                                {itemName:itemName,  //// in html -button onChange={(e)=>setname(e.target.value)}
+                                                              
+                                                                location:location,
+                                                                date:date}
+                                                              )
+                                        }
+                                 );
+             //AUTH PROBLEM❌
+            if(res.status===401) // If authentication fails, logout the user
+                {logout();
+                return;}
+            
+            //SUCCESSFUL✅
+            if(res.ok)                 // If item was successfully added -clear and get total list again
+                {setItemName("");     
+                                  //clear variables
                 setLocation("");
                 setDate("");
 
-                getLostItems();
+                getLostItems();}     // Get the updated list of lost items from database
+             
+            //OTHER PROBLEM❌
+            else 
+               {console.log("Failed to add lost item");}
 
-            } else {
+            
 
-                console.log("Failed to add lost item");
+        } catch(err) 
+                 {console.log("Error:",err);}
 
-            }
-
-        } catch(err) {
-
-            console.log("Error:",err);
-
-        }
+        
     };
-
-    const deleteItem=async(id)=>{
+//________________________________
+    const deleteItem=async(id)=>{    //Delete -if success- Call Get all details again
 
         try {
 
-            const res=await fetch(`https://lost2found-3l2n.onrender.com/api/lost/${id}`,{
-                method:"DELETE",
-                headers:{
-                    Authorization:`Bearer ${token}`
-                }
-            });
+            const res=await fetch(`https://lost2found-3l2n.onrender.com/api/lost/${id}`,
+                                            {method:"DELETE",
+                                            headers:
+                                                {Authorization:`Bearer ${token}`}
+                                                //vo
+                                            }
+                                 );
+            //AUTH PROBLEM❌
+            if(res.status===401)     // If token is invalid/expired, logout
+                        {logout();
+                        return;}
+            
+            //SUCCESSFUL✅
+            if(res.ok)       // If deletion was successful
+                   {getLostItems();}   //update the page
+            
+            //OTHER PROBLEM❌
+            else 
+                {console.log("Failed to delete lost item");}
 
-            if(res.status===401) {
-                logout();
-                return;
-            }
+            
 
-            if(res.ok) {
+        } catch(err) 
+                 {console.log("Error:",err);}
 
-                getLostItems();
-
-            } else {
-
-                console.log("Failed to delete lost item");
-
-            }
-
-        } catch(err) {
-
-            console.log("Error:",err);
-
-        }
+        
     };
-
+//__________________________________________________________________________________________________
     return (
 
         <div className="items-page">
@@ -179,19 +191,7 @@ function LostItems() {
 
                         </div>
 
-                        <div className="form-group">
-
-                            <label>Category</label>
-
-                            <input
-                                type="text"
-                                placeholder="Example: Accessories"
-                                value={category}
-                                onChange={(e)=>setCategory(e.target.value)}
-                                required
-                            />
-
-                        </div>
+ 
 
                         <div className="form-group">
 
@@ -234,12 +234,14 @@ function LostItems() {
                 <div className="items-section">
 
                     <h2>All Lost Items</h2>
-
-                    {items.length===0 && (
-                        <div className="empty-message">
-                            No lost items reported yet.
-                        </div>
-                    )}
+                   
+                     {/* If there are no items, show this message */}
+                    {items.length===0 &&       //value + data type
+                                    (<div className="empty-message">
+                                        No lost items reported yet.
+                                    </div>
+                                    )
+                    }
 
                     <div className="items-grid">
 
@@ -247,7 +249,7 @@ function LostItems() {
 
                             <div
                                 className="item-card"
-                                key={item.id}
+                                key={item.id}        // key helps React identify each item uniquely
                             >
 
                                 <h3>{item.itemName}</h3>
@@ -271,17 +273,20 @@ function LostItems() {
                                 <p>
                                     <strong>Email:</strong> {item.email}
                                 </p>
+ 
+                                  {/* Show Delete button ONLY if this item belongs to
+                                    the currently logged-in user */}
 
                                 {item.email===loggedInEmail && (
+                                                                <button
+                                                                    className="delete-button"
+                                                                    onClick={()=>deleteItem(item.id)}
+                                                                >
+                                                                    Delete
+                                                                </button>
 
-                                    <button
-                                        className="delete-button"
-                                        onClick={()=>deleteItem(item.id)}
-                                    >
-                                        Delete
-                                    </button>
-
-                                )}
+                                                               )
+                                }
 
                             </div>
 

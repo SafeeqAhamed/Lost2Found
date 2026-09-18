@@ -3,142 +3,166 @@ import {useNavigate} from "react-router-dom";
 
 function Login({onLogin}) {
 
-const [email,setEmail]=useState("");
-const [password,setPassword]=useState("");
-const [error,setError]=useState("");
+                const [email,setEmail]=useState("");
+                const [password,setPassword]=useState("");
+                const [error,setError]=useState("");
 
-const navigate=useNavigate();
+                const navigate=useNavigate();
 
-const handleSubmit=async(e)=>{
-    e.preventDefault();
 
-    setError("");
+                //_____________________________________________________________________________
+                //async = function can perform an operation that takes some time
+                    // e = antha e kulla type panna all details
 
-    try {
+                const handleSubmit=async(e)=>{
 
-        const res=await fetch("https://lost2found-3l2n.onrender.com/api/auth/login",{
-            method:"POST",
-            headers:{
-                "Content-Type":"application/json"
-            },
-            body:JSON.stringify({
-                email:email,
-                password:password
-            })
-        });
+                    e.preventDefault(); //Default ah page ah reload agratha prevent pannum
+                
+                    setError("");
 
-        const text=await res.text();
+                    try {
+                                //await → Wait for that operation to finish
+                        const res=await fetch("https://lost2found-3l2n.onrender.com/api/auth/login",
+                                                    {method:"POST",
+                                                     headers: {"Content-Type":"application/json"} ,
+                                                        //no need Authorization
+                                                     body:
+                                                        JSON.stringify
+                                                                    ({email:email,   // in html -button onChange={(e)=>setEmail(e.target.value)}
+                                                                    password:password })
+                                                
+                                                    }
+                                            );
+                        
+                        //res.text → {"token":"abc123","username":"Safeeq"}                    
+                        //Reading the response body can take time
+                        const text=await res.text();
+                                        //res.ok       // Was the request successful?
+                                        //res.status   // 200, 401, etc.
+                
 
-        let data=null;
+                        let data=null;    //let - reassigned   const -cannot reassigned
 
-        if(text) {
-            try {
-                data=JSON.parse(text);
-            } catch {
-                data=text;
-            }
-        }
+                        if(text) 
+                            {   try {
+                                    data=JSON.parse(text);   //text->JSON ,so we get acess to data.token,data.username
+                                } catch {        //JSON.parse("Invalid email or password") ❌=Error
+                                    data=text;    // So store the plain text directly instead
+                                }
+                            }
+ 
+                        //SUCCESSFUL✅
+                        if(res.ok)   //store -> Login -> Dashboard
+                                {
+                                    localStorage.setItem("token",data.token);  //can be used later to prove user is logged in
+                                    localStorage.setItem("username",data.username);
+                                    localStorage.setItem("email",data.email);
 
-        if(res.ok) {
+                                    // Call the onLogin function received from App component
+                                    onLogin();     //onLogin={()=>setIsLoggedIn(true)}
+                                                // This changes the application's login state to true
 
-            localStorage.setItem("token",data.token);
-            localStorage.setItem("username",data.username);
-            localStorage.setItem("email",data.email);
+                                    navigate("/dashboard"); 
+                                }
 
-            onLogin();
+                        //AUTH ERROR❌  
+                        else if(res.status===401)  // Unauthorized → invalid email or password
+                                    {setError("Invalid email or password.");} // Display an error message to the user
 
-            navigate("/dashboard");
+                        //OTHER ERROR❌
+                        else 
+                            // If backend sent an error message, display it
+                            // Otherwise display the default "Login failed" message
+                            {setError(data || "Login failed");}
 
-        } else if(res.status===401) {
+                        
 
-            setError("Invalid email or password.");
+                    } catch(error) {
 
-        } else {
+                        console.error("Login error:",error);
 
-            setError(data || "Login failed");
+                        setError("Cannot connect to backend");
 
-        }
+                    }
+                };
+                //________________________________________________________________________________________
 
-    } catch(error) {
+                return (
 
-        console.error("Login error:",error);
+                    <div className="auth-page">
 
-        setError("Cannot connect to backend");
+                        <div className="auth-card">
 
-    }
-};
+                            <h1>VIT Lost & Found</h1>
 
-return (
+                            <h2>Login</h2>
 
-    <div className="auth-page">
+                            {error && (
+                                    <p className="error-message">
+                                        {error}
+                                    </p>
+                                    )
+                            }
+                            
+                            {/* When the form is submitted, handleSubmit() is called */}
+                            <form onSubmit={handleSubmit}>
 
-        <div className="auth-card">
+                                <div className="form-group">
 
-            <h1>VIT Lost & Found</h1>
+                                    <label>Email</label>
 
-            <h2>Login</h2>
+                                    <input
+                                        type="email"
+                                        placeholder="Enter your VIT email"
+                                        value={email}
+                                        onChange={(e)=>setEmail(e.target.value)}
+                                        required
+                                    />
 
-            {error && (
-                <p className="error-message">
-                    {error}
-                </p>
-            )}
+                                </div>
 
-            <form onSubmit={handleSubmit}>
+                                <div className="form-group">
 
-                <div className="form-group">
+                                    <label>Password</label>
 
-                    <label>Email</label>
+                                    <input
+                                        type="password"
+                                        placeholder="Enter your password"
+                                        value={password}
+                                        onChange={(e)=>setPassword(e.target.value)}
+                                        required
+                                    />
 
-                    <input
-                        type="email"
-                        placeholder="Enter your VIT email"
-                        value={email}
-                        onChange={(e)=>setEmail(e.target.value)}
-                        required
-                    />
+                                </div>
 
-                </div>
+                                <button
+                                    type="submit"
+                                    className="form-submit"
+                                >
+                                    Login
+                                </button>
 
-                <div className="form-group">
+                            </form>
 
-                    <label>Password</label>
+                            <div className="auth-link">
 
-                    <input
-                        type="password"
-                        placeholder="Enter your password"
-                        value={password}
-                        onChange={(e)=>setPassword(e.target.value)}
-                        required
-                    />
+                                <span>Don't have an account? </span>
 
-                </div>
+                                <button onClick={()=>navigate("/signup")}>
+                                    Create Account
+                                </button>
 
-                <button
-                    type="submit"
-                    className="form-submit"
-                >
-                    Login
-                </button>
+                            </div>
 
-            </form>
+                        </div>
 
-            <div className="auth-link">
+                    </div>
 
-                <span>Don't have an account? </span>
-
-                <button onClick={()=>navigate("/signup")}>
-                    Create Account
-                </button>
-
-            </div>
-
-        </div>
-
-    </div>
-
-);
+                );
 
 }
 
 export default Login;
+
+//If you have multiple buttons with type="submit" inside the same <form>,
+//  then all of them can trigger the same onSubmit={handleSubmit}.

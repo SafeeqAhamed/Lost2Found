@@ -10,6 +10,9 @@ function Dashboard() {
     const username=localStorage.getItem("username");
     const email=localStorage.getItem("email");
 
+//_____________________________________________________________________________
+
+
     const logout=()=>{
         localStorage.removeItem("token");
         localStorage.removeItem("username");
@@ -17,6 +20,8 @@ function Dashboard() {
 
         navigate("/login");
     };
+
+//_____________________________________________________________________________
 
     return (
         <div className="dashboard">

@@ -15,10 +15,8 @@ import LostItems from "./LostItems";
 import FoundItems from "./FoundItems";
 
 function App() {
-
-    const [isLoggedIn,setIsLoggedIn]=useState(
-        !!localStorage.getItem("token")
-    );
+                                                //localStorage.setItem("token",data.token);   
+    const [isLoggedIn,setIsLoggedIn]=useState( !!localStorage.getItem("token") );   //!reverse !!back in boolean
 
     return (
 
@@ -33,8 +31,9 @@ function App() {
                 path="/login"
                 element={
                     <Login
-                        onLogin={()=>setIsLoggedIn(true)}
-                    />
+                        onLogin={()=>setIsLoggedIn(true)}  //When login is successful, call this function.
+                    />                    // We are passing the onLogin function as a prop
+                                         // so that it can be used inside the Login component
                 }
             />
 
