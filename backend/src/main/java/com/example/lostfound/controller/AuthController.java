@@ -56,7 +56,7 @@ public class AuthController {
         }
 
         if(!passwordEncoder.matches(user.getPassword(),existingUser.getPassword())) {  //hash and match
-            return ResponseEntity.badRequest()
+            return ResponseEntity.status(401)
                     .body("Invalid email or password");
         }
 

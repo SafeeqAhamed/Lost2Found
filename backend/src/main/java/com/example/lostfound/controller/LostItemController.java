@@ -8,21 +8,24 @@ import com.example.lostfound.repository.UserRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import com.example.lostfound.service.GroqService;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/lost")
-@CrossOrigin(origins="*")
 public class LostItemController {
 
     private final LostItemRepository lostItemRepository;
     private final UserRepository userRepository;
 
-    public LostItemController(LostItemRepository lostItemRepository,UserRepository userRepository) {
-        this.lostItemRepository=lostItemRepository;
-        this.userRepository=userRepository;
-    }
+    private final GroqService groqService;
+
+    public LostItemController(LostItemRepository lostItemRepository,UserRepository userRepository,GroqService groqService) 
+                                                            {  this.lostItemRepository=lostItemRepository;
+                                                            this.userRepository=userRepository;
+                                                            this.groqService=groqService;
+                                                            }
 
     @PostMapping
     public ResponseEntity<LostItem> addLostItem(
