@@ -8,21 +8,25 @@ import com.example.lostfound.repository.UserRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import com.example.lostfound.service.GroqService;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/found")
-@CrossOrigin(origins="*")
 public class FoundItemController {
 
     private final FoundItemRepository foundItemRepository;
     private final UserRepository userRepository;
+    private final GroqService groqService;
 
-    public FoundItemController(FoundItemRepository foundItemRepository,UserRepository userRepository) {
-        this.foundItemRepository=foundItemRepository;
-        this.userRepository=userRepository;
-    }
+    public FoundItemController(
+        FoundItemRepository foundItemRepository,UserRepository userRepository,GroqService groqService) 
+                        {
+                            this.foundItemRepository=foundItemRepository;
+                            this.userRepository=userRepository;
+                            this.groqService=groqService;
+                        }
 //___________________________________________________________________________
     @PostMapping
     public ResponseEntity<FoundItem> addFoundItem(
@@ -40,7 +44,12 @@ public class FoundItemController {
         item.setUsername(user.getUsername());
         item.setEmail(user.getEmail());
 
-        FoundItem savedItem=foundItemRepository.save(item);
+        String category= groqService.generateCategory(item.getItemName());
+
+item.setCategory(category);
+
+FoundItem savedItem=
+        foundItemRepository.save(item);
 
         return ResponseEntity.ok(savedItem);
     }

@@ -43,6 +43,10 @@ public class LostItemController {
         item.setUsername(user.getUsername());
         item.setEmail(user.getEmail());
 
+        String category=groqService.generateCategory(item.getItemName());
+
+        item.setCategory(category);
+
         LostItem savedItem=lostItemRepository.save(item);
 
         return ResponseEntity.ok(savedItem);
